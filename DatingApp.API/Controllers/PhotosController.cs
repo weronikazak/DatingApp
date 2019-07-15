@@ -124,7 +124,7 @@ namespace DatingApp.API.Controllers
             if (await _repo.SaveAll())
                 return NoContent();
 
-            return BadRequest("Ooops, something went wrong");
+            return BadRequest("Unable to set photo as main");
 
         }
     }
