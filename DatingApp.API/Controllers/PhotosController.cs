@@ -80,7 +80,7 @@ namespace DatingApp.API.Controllers
  
             var photo = _mapper.Map<Photo>(photoForCreationDto);
  
-            if (userFromRepo.Photos.Any(u => u.IsMain))
+            if (!userFromRepo.Photos.Any(u => u.IsMain))
             {
                 photo.IsMain = true;
             }
@@ -94,6 +94,38 @@ namespace DatingApp.API.Controllers
             }
  
             return BadRequest("could not upload photo");
+        }
+
+        [HttpPost("{photoId}/setMain")]
+        public async Task<IActionResult> SetMainPhoto(int userId, int photoId){
+            if (userId != int.Parse (User.FindFirst (ClaimTypes.NameIdentifier).Value)) {
+                return Unauthorized();
+            }
+
+            var user = await _repo.GetUser(userId);
+
+            if (!user.Photos.Any(p => p.Id == photoId)){
+                return Unauthorized();
+            }
+            
+
+            var photoFromRepo = await _repo.GetPhoto(photoId);
+
+            if (photoFromRepo.IsMain){
+                return BadRequest("The selected photo already is the main photo");
+            }
+
+            var currentMainPhoto = await _repo.GetMainPhotoForUser(userId);
+
+            currentMainPhoto.IsMain = false;
+
+            photoFromRepo.IsMain = true;
+
+            if (await _repo.SaveAll())
+                return NoContent();
+
+            return BadRequest("Ooops, something went wrong");
+
         }
     }
 }

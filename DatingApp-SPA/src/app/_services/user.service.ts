@@ -30,4 +30,8 @@ export class UserService {
   updateUser(id: MemberCardComponent, user: User) {
     return this.http.put<User>(this.baseUrl + 'user/' + id, user);
   }
+
+  setMainPhoto(userId: number, photoId: number) {
+    return this.http.post(this.baseUrl + 'user/' + userId + '/photos/' + photoId + '/setMain', httpOptions);
+  }
 }
