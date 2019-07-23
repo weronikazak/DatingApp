@@ -26,7 +26,7 @@ export class MemberListComponent implements OnInit {
       this.pagination = data['users'].pagination;
     });
 
-    this.userParams.gender = this.user.genger === 'female' ? 'male' : 'female';
+    this.userParams.gender = this.user.gender === 'female' ? 'male' : 'female';
     this.userParams.minAge = 18;
     this.userParams.maxAge = 99;
   }
@@ -37,10 +37,10 @@ export class MemberListComponent implements OnInit {
   }
 
   resetFilters() {
-    this.userParams.gender = this.user.genger === 'female' ? 'male' : 'female';
+    this.userParams.gender = this.user.gender === 'female' ? 'male' : 'female';
     this.userParams.minAge = 18;
     this.userParams.maxAge = 99;
-    this.loadUsers();
+    this.userParams.orderBy = 'lastActive';
   }
 
   loadUsers() {
